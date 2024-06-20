@@ -7,6 +7,9 @@ This project aimed to find important cause of road crisis and to utilize various
 - **Model training** | Using XGBoost and LightGBM to find out important features.
 - **Visualization** | Using Tableau, QGIS and also matplotlib to demonstrate important findings.
 
+# License
+This project is licensed under the Apache 2.0 License. For more details, please refer to the LICENSE file.
+
 ## Quick Start
 1. install python 3.X and anaconda
 2. create environment using anaconda and [Yaml file](https://github.com/Chu-c-git/Data-Science-Project_01_Roadcrisis_prevention_analysis/blob/main/practice_02_environment.yml).

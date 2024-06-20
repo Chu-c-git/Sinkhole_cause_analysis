@@ -1,7 +1,7 @@
 dataset_name,dataset_source,download_type,file_name,web_link,download_link
 過去9年地面測站每日雨量資料,氣象資料開放平台,Manually,C-B0025-002.zip,https://opendata.cwa.gov.tw/dataset/climate/C-B0025-002,
 地震目錄-歷史地震目錄,氣象資料開放平台,Manually,E-A0073-002.zip,https://opendata.cwa.gov.tw/dataset/earthquake/E-A0073-002,
-潮位統計-臺灣各地歷史潮位觀測逐年月統計,氣象資料開放平台,Manually,C-B0052-001.xml,https://opendata.cwa.gov.tw/dataset/earthquake/C-B0052-001,
+潮位統計-臺灣各地歷史潮位觀測逐年月統計,氣象資料開放平台,Manually,C-B0052-001.json,https://opendata.cwa.gov.tw/dataset/earthquake/C-B0052-001,
 歷史地下水位(自記站日水位),經濟部水利署水文資訊網,Request,202400337_日水位.csv,https://gweb.wra.gov.tw/Hydroinfo/?id=Index,
 歷史河川水位(日水位),經濟部水利署水文資訊網,Request,202400337_自記站日水位.csv,https://gweb.wra.gov.tw/Hydroinfo/?id=Index,
 地下水觀測井位置圖_現存站,政府資料開放平台,Auto,246-地下水觀測井位置圖現存站.csv,https://data.gov.tw/dataset/32725,https://opendata.wra.gov.tw/CloudFile/getFile.ashx?id=C560B8A6-2FFA-4F40-A47C-21139D64144B

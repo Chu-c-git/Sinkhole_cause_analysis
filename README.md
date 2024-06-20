@@ -1,4 +1,4 @@
-# <img src="https://hackmd.io/_uploads/ryIFYb-UR.svg" alt="TUIC" width="40" height="40"> Sinkhole Cause Analysis
+# <img src="src/TUIC.svg" alt="TUIC" width="40" height="40"> Sinkhole Cause Analysis
 This project aimed to find important cause of road crisis and to utilize various open data to predict the happening of road crisis.
 
 # Feature

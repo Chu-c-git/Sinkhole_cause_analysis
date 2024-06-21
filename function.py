@@ -73,3 +73,23 @@ def download_file(
         return full_file_path
     except Exception as e:
         raise e
+    
+# fill missing level
+def fill_missing_level(group):
+    for i in range(len(group)):
+        if pd.isna(group.iloc[i]['水位(m)']):
+            # Get the water level values from the previous and next day
+            prev_val = group.iloc[i-1]['水位(m)'] if i-1 >= 0 else None
+            next_val = group.iloc[i+1]['水位(m)'] if i+1 < len(group) else None
+            
+            # Check if the previous and next day values are not missing
+            if pd.notna(prev_val) and pd.notna(next_val):
+                group.at[group.index[i], '水位(m)'] = (prev_val + next_val) / 2
+            else:
+                # Get the water level values from the previous two days and the next two days
+                prev_vals = group.iloc[max(0, i-2):i]['水位(m)'].dropna().tolist()
+                next_vals = group.iloc[i+1:i+3]['水位(m)'].dropna().tolist()
+                combined_vals = prev_vals + next_vals
+                if combined_vals:
+                    group.at[group.index[i], '水位(m)'] = sum(combined_vals) / len(combined_vals)
+    return group

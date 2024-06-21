@@ -4,8 +4,8 @@ dataset_name,dataset_source,download_type,file_name,web_link,download_link
 潮位統計-臺灣各地歷史潮位觀測逐年月統計,氣象資料開放平台,Manually,C-B0052-001.json,https://opendata.cwa.gov.tw/dataset/earthquake/C-B0052-001,
 歷史地下水位(自記站日水位),經濟部水利署水文資訊網,Request,202400337_日水位.csv,https://gweb.wra.gov.tw/Hydroinfo/?id=Index,
 歷史河川水位(日水位),經濟部水利署水文資訊網,Request,202400337_自記站日水位.csv,https://gweb.wra.gov.tw/Hydroinfo/?id=Index,
-地下水觀測井位置圖_現存站,政府資料開放平台,Auto,246-地下水觀測井位置圖現存站.csv,https://data.gov.tw/dataset/32725,https://opendata.wra.gov.tw/CloudFile/getFile.ashx?id=C560B8A6-2FFA-4F40-A47C-21139D64144B
-河川水位測站位置圖_現存站,政府資料開放平台,Auto,214-河川水位測站位置圖現存站.csv,https://data.gov.tw/dataset/25784,https://opendata.wra.gov.tw/CloudFile/getFile.ashx?id=09F6BCFF-EE2C-4B84-85A8-97EC295E5A52
+地下水觀測井位置圖_現存站,政府資料開放平台,Auto,RIVWLSTA_e.zip,https://data.gov.tw/dataset/32725,https://gic.wra.gov.tw/gis/gic/API/Google/DownLoad.aspx?fname=RIVWLSTA_e&filetype=SHP
+河川水位測站位置圖_現存站,政府資料開放平台,Auto,gwobwell_e.zip,https://data.gov.tw/dataset/25784,https://gic.wra.gov.tw/gis/gic/API/Google/DownLoad.aspx?fname=gwobwell_e&filetype=SHP
 臺北市水綠地圖集-透水鋪面_PAC鋪面,臺北市資料大平台,Auto,J0101-3.geojson,https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=c50b43ea-d927-492c-a828-06a06389c3ee
 臺北市水綠地圖集-透水鋪面_人行道透水鋪面,臺北市資料大平台,Auto,J0201-5.geojson,https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=7eb15e5a-0532-41f0-8d3e-f756d797c293
 臺北市水綠地圖集-透水鋪面_學校透水鋪面,臺北市資料大平台,Auto,J0501-5.geojson,https://data.taipei/dataset/detail?id=5b277432-f534-4d09-a24c-d3f6b514e042,https://data.taipei/api/frontstage/tpeod/dataset/resource.download?rid=d449e232-51ff-4404-b730-8f9a2d9106cf

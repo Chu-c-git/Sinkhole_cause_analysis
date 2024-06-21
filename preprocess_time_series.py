@@ -1,18 +1,27 @@
 """
+This script preprocesses various environmental data for the analysis of sinkhole causes. The data 
+includes tide levels, road cases, earthquake occurrences, precipitation, river levels, and 
+groundwater levels. The script sets up paths and configurations, extracts and preprocesses the data,
+creates time series tables, concatenates them into a single DataFrame, and exports the final 
+merged DataFrame.
 
+# Configuration
+START_DATE : 
+The start date for the data preprocessing period. Data before this date will be excluded.
+END_DATE : 
+The end date for the data preprocessing period. Data after this date will be excluded.
+TIME_PERIOD : 
+The time period for aggregating the data. 'M' stands for monthly aggregation.
+YEARS :  
+The years for which the data will be extracted and processed.
 """
 
-import csv
-import glob
 import os
-import time
 import xml.etree.ElementTree as ET
-import zipfile
 from datetime import datetime
 
-import requests
+import geopandas as gpd
 from function import *
-from tqdm import tqdm
 
 # Set path
 DOWNLOAD_FOLDER = "data/raw_data"
@@ -798,8 +807,8 @@ def create_river_level_table(river_level_gdf, start_date, end_date, time_period)
 
 ## Ground water level
 def create_groundwater_level_table(
-    groundwater_level_gdf, start_date, end_date, time_period
-):
+    groundwater_level_gdf, start_date, end_date
+    ):
     """
     Create a time series table for ground water level data.
 

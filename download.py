@@ -9,91 +9,115 @@ csv file is not found, the script will print an error message and exit.
 
 import csv
 import os
-import time
 import zipfile
+from datetime import datetime
 
+import pandas as pd
 import requests
-from function import *
 from tqdm import tqdm
 
-# Set path
-DOWNLOAD_FOLDER = 'data/raw_data'
-CSV_FILE = 'data/open_data_download_url.csv'
 
-# Function
-## Create download folder
-def create_download_folder():
-    if not os.path.exists(DOWNLOAD_FOLDER):
-        os.makedirs(DOWNLOAD_FOLDER)
-    else:
-        print('Folder exists.')
+class Download:
+    def __init__(
+        self,
+        download_folder="data/raw_data",
+        csv_file="data/open_data_download_url.csv",
+    ):
+        self.download_folder = download_folder
+        self.csv_file = csv_file
+        self.create_download_folder()
 
-## Batch Download file
-def download_file(file_name, url, download_folder, is_proxy=False, is_verify=True, timeout=60):
-    file_path = os.path.join(download_folder, file_name)
-    if os.path.exists(file_path):
-        print(f'{file_name} already exists. Skipping download.')
-        return
+    def create_download_folder(self):
+        if not os.path.exists(self.download_folder):
+            os.makedirs(self.download_folder)
+        else:
+            print("Folder exists.")
 
-    try:
-        with requests.get(url, stream=True, proxies=None if not is_proxy else {'http': 'http://your_proxy', 'https': 'https://your_proxy'}, verify=is_verify, timeout=timeout) as r:
-            r.raise_for_status()
-            with open(file_path, 'wb') as f:
-                for chunk in tqdm(r.iter_content(chunk_size=8192), total=None, desc=f'Downloading {file_name}'):
-                    f.write(chunk)
-    except requests.exceptions.RequestException as e:
-        print(f"Error downloading {file_name} from {url}: {e}")
+    def download_file(self, file_name, url, is_proxy=False, is_verify=True, timeout=60):
+        file_path = os.path.join(self.download_folder, file_name)
+        if os.path.exists(file_path):
+            print(f"{file_name} already exists. Skipping download.")
+            return
 
-## Check missing files
-def check_missing_files(download_folder, expected_files):
-    downloaded_files = set(os.listdir(download_folder))
-    missing_files = [file for file in expected_files if file not in downloaded_files]
-    if missing_files:
-        print("Missing files:")
-        for file in missing_files:
-            print(file)
-    else:
-        print("All files have been downloaded.")
+        try:
+            with requests.get(
+                url,
+                stream=True,
+                proxies=(
+                    None
+                    if not is_proxy
+                    else {"http": "http://your_proxy", "https": "https://your_proxy"}
+                ),
+                verify=is_verify,
+                timeout=timeout,
+            ) as r:
+                r.raise_for_status()
+                with open(file_path, "wb") as f:
+                    for chunk in tqdm(
+                        r.iter_content(chunk_size=8192),
+                        total=None,
+                        desc=f"Downloading {file_name}",
+                    ):
+                        f.write(chunk)
+        except requests.exceptions.RequestException as e:
+            print(f"Error downloading {file_name} from {url}: {e}")
 
-## Unzip files
-def unzip_files(download_folder):
-    for item in os.listdir(download_folder):
-        if item.endswith('.zip'):
-            file_path = os.path.join(download_folder, item)
-            folder_name = os.path.splitext(item)[0]
-            unzip_dir = os.path.join(download_folder, folder_name)
-            os.makedirs(unzip_dir, exist_ok=True)
-            with zipfile.ZipFile(file_path, 'r') as zip_ref:
-                zip_ref.extractall(unzip_dir)
-            print(f"{item} unzipped to {folder_name}/")
+    def check_missing_files(self, expected_files):
+        downloaded_files = set(os.listdir(self.download_folder))
+        missing_files = [
+            file for file in expected_files if file not in downloaded_files
+        ]
+        if missing_files:
+            print("Missing files:")
+            for file in missing_files:
+                print(file)
+        else:
+            print("All files have been downloaded.")
 
-## Main
-def main():
-    create_download_folder()
+    def unzip_files(self):
+        for item in os.listdir(self.download_folder):
+            if item.endswith(".zip"):
+                file_path = os.path.join(self.download_folder, item)
+                folder_name = os.path.splitext(item)[0]
+                unzip_dir = os.path.join(self.download_folder, folder_name)
+                os.makedirs(unzip_dir, exist_ok=True)
+                with zipfile.ZipFile(file_path, "r") as zip_ref:
+                    zip_ref.extractall(unzip_dir)
+                print(f"{item} unzipped to {folder_name}/")
 
-    try:
-        url_file = pd.read_csv(CSV_FILE, encoding='utf-8')
-    except FileNotFoundError:
-        print("CSV file not found.")
-        return
+    def run(self):
+        start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"Data Downloading Start at {start_time}!\n")
 
-    auto_df = url_file[url_file['download_type'] == 'Auto']
-    manual_df = url_file[url_file['download_type'] == 'Manually']
-    request_df = url_file[url_file['download_type'] == 'Request']
+        try:
+            url_file = pd.read_csv(self.csv_file, encoding="utf-8")
+        except FileNotFoundError:
+            print("CSV file not found.")
+            return
 
-    for idx, row in auto_df.iterrows():
-        download_file(row['file_name'], row['download_link'], DOWNLOAD_FOLDER)
+        auto_df = url_file[url_file["download_type"] == "Auto"]
+        manual_df = url_file[url_file["download_type"] == "Manually"]
+        request_df = url_file[url_file["download_type"] == "Request"]
 
-    unzip_files(DOWNLOAD_FOLDER)
+        for idx, row in auto_df.iterrows():
+            self.download_file(row["file_name"], row["download_link"])
 
-    print("== Auto_download_file ==")
-    check_missing_files(DOWNLOAD_FOLDER, auto_df['file_name'])
+        self.unzip_files()
 
-    print("== Manually_download_file ==")
-    check_missing_files(DOWNLOAD_FOLDER, manual_df['file_name'])
+        print("== Auto_download_file ==")
+        self.check_missing_files(auto_df["file_name"])
 
-    print("== Requested_download_file ==")
-    check_missing_files(DOWNLOAD_FOLDER, request_df['file_name'])
+        print("== Manually_download_file ==")
+        self.check_missing_files(manual_df["file_name"])
 
+        print("== Requested_download_file ==")
+        self.check_missing_files(request_df["file_name"])
+
+        end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        print(f"\nData Downloading Complete at {end_time}!")
+
+
+# 如果需要直接執行這個腳本，可以加上以下程式碼
 if __name__ == "__main__":
-    main()
+    download_manager = Download()
+    download_manager.run()

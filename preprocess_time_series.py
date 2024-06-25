@@ -601,11 +601,9 @@ def create_tide_table(tide_df, start_date, end_date, time_period):
     # Filter columns
     period_count = tide_cl.copy()
     period_count["Date"] = period_count["Date"].dt.to_period(time_period)
-
-    # period_count_tide = period_count[['Date', 'MeanTideLevel']].reset_index(drop=True)
     period_count_tide = period_count.drop(columns=["StationName"])
-
     period_count_tide = period_count_tide.set_index("Date")
+    period_count_tide.to_csv("data/preprocessed_data/tide.csv")
     return period_count_tide
 
 ## Road case
@@ -998,7 +996,7 @@ def main():
         river_level_gdf, START_DATE, END_DATE, TIME_PERIOD
     )
     period_ugwater_level = create_groundwater_level_table(
-        groundwater_level_gdf, START_DATE, END_DATE, TIME_PERIOD
+        groundwater_level_gdf, START_DATE, END_DATE
     )
 
     # Concatenate DataFrames

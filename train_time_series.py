@@ -33,7 +33,7 @@ class TrainTimeSeries:
         self.export_folder = export_folder
         self.output_folder = output_folder
 
-# Load and transform time series data
+    # Load and transform time series data
     def time_series_data_etl(self, file_name="time_series_table_M.csv", trans_col=None):
         """
         Load and transform time series data from a CSV file.
@@ -55,37 +55,41 @@ class TrainTimeSeries:
         # Load the CSV file into a DataFrame
         merged_df = pd.read_csv(merged_df_path)
         
-        # Convert the 'index' column to datetime
-        merged_df['index'] = pd.to_datetime(merged_df['index'])
-        
-        # Convert specified columns to numeric, handling errors by coercing them to NaN
-        for col in trans_col:
-            merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+        # Check if 'sinkhole_count' column is present
+        if 'sinkhole_count' not in merged_df.columns:
+            print("Without Sinkhole count column")
+
+            trans_col = ['MeanTideLevel', 'MeanHighWaterLevel', 'MeanLowWaterLevel', 
+                        'earthquake_count', 'total_rain', 'tide_range']
+            # Convert the 'index' column to datetime
+            merged_df['index'] = pd.to_datetime(merged_df['index'])
+            
+            # Convert specified columns to numeric, handling errors by coercing them to NaN
+            for col in trans_col:
+                merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+        else:
+            # Convert the 'index' column to datetime
+            merged_df['index'] = pd.to_datetime(merged_df['index'])
+            
+            # Convert specified columns to numeric, handling errors by coercing them to NaN
+            for col in trans_col:
+                merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
         
         return merged_df
 
 
     # Rename columns
-    def load_transform_and_rename_time_series_data(
-            self, 
-            file_name="time_series_table_M.csv", 
-            trans_col=None, 
-            rename_dict=None
-        ):
+    def rename_time_series_data(self, merged_df, rename_dict=None):
         """
-        Load, transform, and rename columns of time series data from a CSV file.
+        Rename columns of time series data from a CSV file.
 
         Parameters:
-        - file_name: The name of the CSV file (default: "time_series_table_M.csv").
         - trans_col: List of columns to be transformed to numeric (default: list of specific columns).
         - rename_dict: Dictionary to rename columns (default: None).
 
         Returns:
         - merged_df: The transformed and renamed DataFrame.
         """
-        if trans_col is None:
-            trans_col = ['sinkhole_count', 'MeanTideLevel', 'MeanHighWaterLevel',
-                        'MeanLowWaterLevel', 'earthquake_count', 'total_rain', 'tide_range']
         
         if rename_dict is None:
             rename_dict = {
@@ -109,19 +113,6 @@ class TrainTimeSeries:
                 'ugwater_level_mean': 'Mean Ground Water Level', 
                 'tide_range': 'Tide Range',
             }
-
-        # Construct the full path to the CSV file
-        merged_df_path = os.path.join(self.export_folder, file_name)
-        
-        # Load the CSV file into a DataFrame
-        merged_df = pd.read_csv(merged_df_path)
-        
-        # Convert the 'index' column to datetime
-        merged_df['index'] = pd.to_datetime(merged_df['index'])
-        
-        # Convert specified columns to numeric, handling errors by coercing them to NaN
-        for col in trans_col:
-            merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
         
         # Rename columns
         merged_df = merged_df.rename(columns=rename_dict)
@@ -364,24 +355,32 @@ class TrainTimeSeries:
     def run(self):
         # Load and transform time series data
         merged_df = self.time_series_data_etl(file_name="time_series_table_M.csv", trans_col=None)
+        
+        # Rename columns
+        merged_df = self.rename_time_series_data(merged_df, rename_dict=None)
 
-        # Split the time series data
-        X_train, y_train, X_val, y_val, X_test, y_test = self.split_time_series_data(merged_df)
+        if 'sinkhole_count' not in merged_df.columns:
+            print("====Without Sinkhole count column, skip model training.====")
+            return None
+        
+        else:
+            # Split the time series data
+            X_train, y_train, X_val, y_val, X_test, y_test = self.split_time_series_data(merged_df)
 
-        # Train an XGBoost model
-        reg = self.train_xgb_regressor(X_train, y_train, X_val, y_val)
+            # Train an XGBoost model
+            reg = self.train_xgb_regressor(X_train, y_train, X_val, y_val)
 
-        # Evaluate the model performance
-        self.evaluate_model_performance(reg, X_test, y_test)
+            # Evaluate the model performance
+            self.evaluate_model_performance(reg, X_test, y_test)
 
-        # Create output folder
-        self.create_output_folder()
+            # Create output folder
+            self.create_output_folder()
 
-        # Plot feature importance
-        self.plot_feature_importance(reg, save_fig=True)
+            # Plot feature importance
+            self.plot_feature_importance(reg, save_fig=True)
 
-        # Plot actual vs predicted sinkhole count
-        self.plot_actual_vs_predicted(merged_df, reg, X_test, save_fig=True)
+            # Plot actual vs predicted sinkhole count
+            self.plot_actual_vs_predicted(merged_df, reg, X_test, save_fig=True)
 
 if __name__ == '__main__':
     START_TIME = datetime.now().strftime('%Y-%m-%d %H:%M:%S')

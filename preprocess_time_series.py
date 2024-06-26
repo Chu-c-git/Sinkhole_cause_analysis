@@ -545,7 +545,7 @@ class PreprocessTimeSeries:
         period_count["Date"] = period_count["Date"].dt.to_period(self.time_period)
         period_count_tide = period_count.drop(columns=["StationName"])
         period_count_tide = period_count_tide.set_index("Date")
-        period_count_tide.to_csv("data/preprocessed_data/tide.csv")
+        # period_count_tide.to_csv("data/preprocessed_data/tide.csv")
         return period_count_tide
     
     ## Road case

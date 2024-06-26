@@ -907,7 +907,7 @@ class PreprocessTimeSeries:
         tide_df = self.extract_tide_data()
         road_case_df = self.extract_road_case_data()
         tp_border_gdf = self.extract_tp_border_data()
-        earthquake_gdf = preprocess.extract_earthquake_data(tp_border_gdf)
+        earthquake_gdf = self.extract_earthquake_data(tp_border_gdf)
         precipitation_df = self.extract_all_rainfall_data()
         river_level_gdf = self.extract_river_level_data()
         groundwater_level_gdf = self.extract_groundwater_level_data()

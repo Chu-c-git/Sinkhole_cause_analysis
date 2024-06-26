@@ -800,6 +800,7 @@ class PreprocessTimeSeries:
     # Concate Dataframe
     ## concat dataframes
     def concat_dataframes(
+        self,
         period_count_sinkhole,
         period_count_tide,
         period_count_earthquake,
@@ -842,7 +843,7 @@ class PreprocessTimeSeries:
         return merged_df
 
     ## Create tide range feature
-    def arrange_merged_df(merged_df, time_period):
+    def arrange_merged_df(self, merged_df, time_period):
         """
         Arrange the columns of the merged DataFrame.
 
@@ -853,6 +854,9 @@ class PreprocessTimeSeries:
         Returns:
         pd.DataFrame: DataFrame with the columns arranged in the desired order.
         """
+        if not isinstance(merged_df, pd.DataFrame):
+            raise ValueError("The input merged_df should be a pandas DataFrame.")
+
         # Sort index & fillna
         merged_df = merged_df.sort_index().fillna(0)
         merged_df = merged_df.reset_index()
@@ -927,7 +931,7 @@ class PreprocessTimeSeries:
         )
 
         # Arrange the merged DataFrame
-        arranged_df = self.arrange_merged_df(merged_df)
+        arranged_df = self.arrange_merged_df(merged_df, self.time_period)
 
         # create export folder
         self.create_export_folder()

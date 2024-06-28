@@ -97,7 +97,6 @@ data/raw_data/gwobwell_e.zip
 __pycache__/function.cpython-312.pyc
 data/raw_data/道管系統坑洞案件_108-112_Chu加案件標記_20240201.csv
 *.pyc
-data/raw_data/8mroadup.gpkg
 data/raw_data/8mroadup.zip
 data/raw_data/8mroadup/8mroadup/Road.cpg
 data/raw_data/8mroadup/8mroadup/Road.dbf

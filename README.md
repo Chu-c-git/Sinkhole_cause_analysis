@@ -14,6 +14,7 @@ Records of road repair-related cases, including details reported by the public, 
 Records of water pipeline (such as tap water pipelines) repair cases, including the construction sections, report dates, and repair purposes.
 
 ### Open data
+For the usage of open data, you can refer to the list [here.](https://github.com/Chu-c-git/Sinkhole_cause_analysis/blob/main/data/open_data_download_url.csv) The data includes both time-series and spatial analysis. However, for now, the repository only releases the time-series module.
 
 ## Quick Start
 1. install python 3.X and anaconda
